@@ -7,13 +7,9 @@ struct s_sighelper {
 	int offset{};
 	const char* sig{};
 
-	s_sighelper() {
-		offset = 0x0; sig = "";
-	}
-
-	s_sighelper(int _offset, const char* _sig) {
-		offset = _offset; sig = _sig;
-	}
+	constexpr s_sighelper() : offset(0x0), sig("") { }
+	constexpr s_sighelper(const char* sig) : offset(0x0), sig(sig) { }
+	constexpr s_sighelper(int offset, const char* sig) : offset(offset), sig(sig) { }
 };
 
 // helper for signature scanning results
@@ -122,6 +118,48 @@ namespace n_utilities {
 
 	strong_inline s_pattern find_signature(const char* hmodule, s_sighelper& signature) {
 		return find_signature(GetModuleHandle(hmodule), signature);
+	}
+
+	static uintptr_t find_pattern_down(HMODULE hmodule, uintptr_t size, s_sighelper& signature) {
+		if (!hmodule)
+			return 0x0;
+
+		const auto pattern_length = strlen(signature.sig);
+
+		for (auto i = reinterpret_cast<uintptr_t>(hmodule); i < (reinterpret_cast<uintptr_t>(hmodule) + size) - pattern_length; i++) {
+			bool found = true;
+
+			for (size_t idx = 0; idx < pattern_length; idx++) {
+				if (signature.sig[idx] != *(char*)(i + idx)) {
+					found = false;
+					break;
+				}
+			}
+
+			if (found)
+				return i + signature.offset;
+		}
+
+		return 0x0;
+	}
+
+	strong_inline uintptr_t find_str_ref(HMODULE hmodule, uintptr_t size, s_sighelper& signature) {
+		// push null_address
+		char push_address[] = { 0x68, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+		s_sighelper txt(signature.sig);
+		uintptr_t str_def = find_pattern_down(hmodule, size, txt);
+
+		if (!str_def)
+			return 0x0;
+
+		// push str_def
+		*(uintptr_t*)&push_address[1] = str_def;
+
+		txt.sig = push_address;
+		uintptr_t str_ref = find_pattern_down(hmodule, size, txt);
+
+		return str_ref ? str_ref + signature.offset : 0x0;
 	}
 
 	__forceinline void attach_console(const char* name) {

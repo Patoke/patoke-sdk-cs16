@@ -5,6 +5,7 @@
 #include <Psapi.h>
 #include <stdio.h>
 #include <TlHelp32.h>
+#include <intrin.h>
 
 // std headers
 #include <array>

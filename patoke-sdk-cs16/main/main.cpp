@@ -18,7 +18,7 @@ unsigned long __stdcall main_thread(void* hmodule) {
 }
 
 void __stdcall on_detach_module() {
-    // @todo: add detaching
+    initialization_i.cleanup_main();
 }
 
 int __stdcall DllMain(HMODULE hmodule, DWORD reason, LPVOID reserved) {

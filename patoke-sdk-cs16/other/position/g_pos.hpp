@@ -15,6 +15,12 @@ struct s_position {
 	s_position(float x, float y) : x(x), y(y) {}
 };
 
+struct s_position3d : public s_position {
+	float z;
+
+	s_position3d(float x, float y, float z) : s_position(x, y), z(z) {}
+};
+
 struct s_size {
 	float width, height;
 
@@ -28,4 +34,8 @@ struct s_rect : public s_position, s_size {
 
 struct s_vec2 : public s_position {
 	s_vec2(float x, float y) : s_position(x, y) {}
+};
+
+struct s_vec3 : public s_position3d {
+	s_vec3(float x, float y, float z) : s_position3d(x, y, z) {}
 };
