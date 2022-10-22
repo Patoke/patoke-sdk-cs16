@@ -181,6 +181,7 @@
     <ClInclude Include="dependencies\libraries\imgui\imgui.h" />
     <ClInclude Include="dependencies\libraries\imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="dependencies\libraries\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="dependencies\libraries\imgui\imgui_impl_win32.h" />
     <ClInclude Include="dependencies\libraries\imgui\imgui_internal.h" />
     <ClInclude Include="dependencies\libraries\imgui\imstb_rectpack.h" />
     <ClInclude Include="dependencies\libraries\imgui\imstb_textedit.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="dependencies\utilities\pattern\pattern.hpp" />
     <ClInclude Include="dependencies\utilities\pattern\simd_scanner.hpp" />
     <ClInclude Include="dependencies\utilities\utilities.hpp" />
+    <ClInclude Include="dependencies\libraries\wrappers\imgui_wrapper.hpp" />
     <ClInclude Include="main\game\sdk\classes\bspfile.hpp" />
     <ClInclude Include="main\game\sdk\classes\cdll.hpp" />
     <ClInclude Include="main\game\sdk\classes\cmd.hpp" />
@@ -208,15 +210,18 @@
     <ClInclude Include="main\game\sdk\classes\playermove.hpp" />
     <ClInclude Include="main\game\sdk\hlsdk.hpp" />
     <ClInclude Include="main\game\interfaces.hpp" />
+    <ClInclude Include="main\hooks\hooks.hpp" />
     <ClInclude Include="main\initialization\initialization.hpp" />
     <ClInclude Include="other\globals.hpp" />
     <ClInclude Include="other\position\g_pos.hpp" />
+    <ClInclude Include="main\ui\ui.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\libraries\imgui\imgui.cpp" />
     <ClCompile Include="dependencies\libraries\imgui\imgui_demo.cpp" />
     <ClCompile Include="dependencies\libraries\imgui\imgui_draw.cpp" />
     <ClCompile Include="dependencies\libraries\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="dependencies\libraries\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="dependencies\libraries\imgui\imgui_tables.cpp" />
     <ClCompile Include="dependencies\libraries\imgui\imgui_widgets.cpp" />
     <ClCompile Include="dependencies\libraries\minhook\buffer.cpp" />
@@ -224,6 +229,10 @@
     <ClCompile Include="dependencies\libraries\minhook\hde\hde64.cpp" />
     <ClCompile Include="dependencies\libraries\minhook\hook.cpp" />
     <ClCompile Include="dependencies\libraries\minhook\trampoline.cpp" />
+    <ClCompile Include="main\hooks\hooked\createmove.cpp" />
+    <ClCompile Include="main\hooks\hooked\swap_buffers.cpp" />
+    <ClCompile Include="main\hooks\hooked\wndproc.cpp" />
+    <ClCompile Include="main\hooks\hooks.cpp" />
     <ClCompile Include="main\initialization\initialization.cpp" />
     <ClCompile Include="main\main.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">precompiled.hpp</PrecompiledHeaderFile>
@@ -237,6 +246,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="main\ui\ui.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

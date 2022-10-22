@@ -1,10 +1,11 @@
 #include "initialization.hpp"
+#include "../hooks/hooks.hpp"
 #include "../game/interfaces.hpp"
 
 // create init variables
 s_initialization initialization_i;
 s_interfaces interfaces_i;
-//s_hooks hooks_i;
+s_hooks hooks_i;
 
 void s_initialization::init_main() {
 	n_utilities::attach_console("patoke cs 1.6 sdk [debug console]");
@@ -12,12 +13,12 @@ void s_initialization::init_main() {
 	init_interfaces();
 	//init_static_signatures();
 
-	//if (!hooks_i.initialize())
-	//	; // do something
+	if (!hooks_i.initialize())
+		; // do something
 }
 
 void s_initialization::cleanup_main() {
-	//hooks_i.cleanup();
+	hooks_i.cleanup();
 	n_utilities::detach_console();
 }
 
@@ -79,6 +80,7 @@ void s_initialization::init_interfaces() {
 
 	interfaces_i.client = reinterpret_cast<cl_clientfunc_t*>(n_utilities::find_str_ref(hardware_dll, hardware_size, client_str));
 	interfaces_i.engine = reinterpret_cast<cl_enginefunc_t*>(n_utilities::find_str_ref(client_dll, client_size, engine_str));
+	interfaces_i.pmove = reinterpret_cast<playermove_t*>(n_utilities::find_str_ref(hardware_dll, hardware_size, pmove_str));
 
 	// fix for protected memory region
 	RtlCopyMemory(&interfaces_i.client, interfaces_i.client, sizeof(interfaces_i.client));

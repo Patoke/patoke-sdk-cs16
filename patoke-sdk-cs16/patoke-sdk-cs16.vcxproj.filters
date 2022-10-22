@@ -117,6 +117,18 @@
     <ClInclude Include="dependencies\libraries\minhook\trampoline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="main\hooks\hooks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main\ui\ui.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\libraries\wrappers\imgui_wrapper.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\libraries\imgui\imgui_impl_win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main\main.cpp">
@@ -159,6 +171,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dependencies\libraries\minhook\trampoline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main\hooks\hooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main\hooks\hooked\swap_buffers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main\ui\ui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\libraries\imgui\imgui_impl_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main\hooks\hooked\wndproc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main\hooks\hooked\createmove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

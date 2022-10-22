@@ -1,5 +1,8 @@
 #pragma once
+#include <precompiled.hpp>
 #include <utilities/utilities.hpp>
+#include <libraries/wrappers/imgui_wrapper.hpp>
+#include <../main/ui/ui.hpp>
 
 struct s_globals {
 

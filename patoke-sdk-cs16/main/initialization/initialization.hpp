@@ -25,5 +25,6 @@ struct s_initialization {
 	// signatures
 	s_sighelper client_str = s_sighelper(0x13, "ScreenFade");
 	s_sighelper engine_str = s_sighelper(0x12, "sprites/%s.spr");
+	s_sighelper pmove_str = s_sighelper(0x18, "ScreenFade");
 
 } extern initialization_i;
