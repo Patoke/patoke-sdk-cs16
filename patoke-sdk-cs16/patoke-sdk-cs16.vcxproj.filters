@@ -129,6 +129,9 @@
     <ClInclude Include="dependencies\libraries\imgui\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="main\features\movement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main\main.cpp">
@@ -189,6 +192,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main\hooks\hooked\createmove.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main\features\movement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

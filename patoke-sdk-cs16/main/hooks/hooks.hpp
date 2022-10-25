@@ -1,7 +1,9 @@
 #pragma once
 #include <globals.hpp>
 #include <libraries/minhook/minhook.h>
-#include "../game/interfaces.hpp"
+
+// feature includes
+#include "../features/movement.hpp"
 
 struct s_hooks {
 

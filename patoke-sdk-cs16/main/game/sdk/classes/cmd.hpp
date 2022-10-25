@@ -23,7 +23,7 @@ typedef struct usercmd_s
 {
 	short lerp_msec;		// Interpolation time on client
 	byte msec;			// Duration in ms of command
-	s_vec3 viewangles;		// Command view angles.
+	s_angle viewangles;		// Command view angles.
 
 	// intended velocities
 	float forwardmove;		// Forward velocity.

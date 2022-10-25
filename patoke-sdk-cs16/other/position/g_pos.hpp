@@ -29,13 +29,45 @@ struct s_size {
 
 // usage defines, these contain all the helpers for these specific types unlike raw defines
 struct s_rect : public s_position, s_size {
+	s_rect() : s_position(0, 0), s_size(0, 0) {}
 	s_rect(float x, float y, float width, float height) : s_position(x, y), s_size(width, height) {}
 };
 
 struct s_vec2 : public s_position {
+	s_vec2() : s_position(0, 0) {}
 	s_vec2(float x, float y) : s_position(x, y) {}
 };
 
+struct s_angle : public s_position3d {
+	s_angle() : s_position3d(0, 0, 0) {}
+	s_angle(float x, float y, float z) : s_position3d(x, y, z) {}
+
+	inline s_angle operator+(const s_angle& other) const {
+		return s_angle(this->x + other.x, this->y + other.y, this->z + other.z);
+	}
+
+	inline s_angle operator-(const s_angle& other) const {
+		return s_angle(this->x - other.x, this->y - other.y, this->z - other.z);
+	}
+
+	inline s_angle operator/(const float& val) const {
+		return s_angle(this->x / val, this->y / val, this->z / val);
+	}
+};
+
 struct s_vec3 : public s_position3d {
+	s_vec3() : s_position3d(0, 0, 0) {}
 	s_vec3(float x, float y, float z) : s_position3d(x, y, z) {}
+
+	inline s_vec3 operator+(const s_vec3& other) const {
+		return s_vec3(this->x + other.x, this->y + other.y, this->z + other.z);
+	}
+
+	inline s_vec3 operator-(const s_vec3& other) const {
+		return s_vec3(this->x - other.x, this->y - other.y, this->z - other.z);
+	}
+
+	inline s_vec3 operator/(const float& val) const {
+		return s_vec3(this->x / val, this->y / val, this->z / val);
+	}
 };

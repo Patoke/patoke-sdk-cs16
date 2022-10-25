@@ -85,9 +85,11 @@ void s_initialization::init_interfaces() {
 	// fix for protected memory region
 	RtlCopyMemory(&interfaces_i.client, interfaces_i.client, sizeof(interfaces_i.client));
 	RtlCopyMemory(&interfaces_i.engine, interfaces_i.engine, sizeof(interfaces_i.engine));
+	RtlCopyMemory(&interfaces_i.pmove, interfaces_i.pmove, sizeof(interfaces_i.pmove));
 
 	printf("client: 0x%x\n", interfaces_i.client);
 	printf("engine: 0x%x\n", interfaces_i.engine);
+	printf("player move: 0x%x\n", interfaces_i.pmove);
 }
 
 void s_initialization::init_static_signatures() {

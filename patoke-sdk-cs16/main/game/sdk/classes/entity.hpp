@@ -9,6 +9,10 @@
 #define ENTITY_NORMAL	(1<<0)
 #define ENTITY_BEAM	(1<<1)
 
+#define REGULAR_HULL 0
+#define DUCKED_HULL 1
+#define POINT_HULL 2
+
 typedef struct entity_state_s
 {
 	int entityType;
@@ -16,7 +20,7 @@ typedef struct entity_state_s
 	float msg_time;
 	int messagenum;			// Message number last time the player/entity state was updated.
 	s_vec3 origin;			// Fields which can be transitted and reconstructed over the network stream
-	s_vec3 angles;
+	s_angle angles;
 	int modelindex;
 	int sequence;
 	float frame;
@@ -80,7 +84,7 @@ typedef struct clientdata_s
 	s_vec3 origin;
 	s_vec3 velocity;
 	int viewmodel;
-	s_vec3 punchangle;
+	s_angle punchangle;
 	int flags;
 	int waterlevel;
 	int watertype;
@@ -141,7 +145,7 @@ typedef struct
 	float					sequencetime;
 	byte					prevseqblending[2];
 	s_vec3					prevorigin;
-	s_vec3					prevangles;
+	s_angle					prevangles;
 
 	int						prevsequence;
 	float					prevframe;
@@ -156,7 +160,7 @@ typedef struct
 	float					animtime;
 
 	s_vec3					origin;
-	s_vec3					angles;
+	s_angle					angles;
 } position_history_t;
 
 typedef struct cl_entity_s
@@ -182,7 +186,7 @@ typedef struct cl_entity_s
 
 	// Actual render position and angles
 	s_vec3					origin;
-	s_vec3					angles;
+	s_angle					angles;
 
 	// Attachment points
 	s_vec3					attachment[4];

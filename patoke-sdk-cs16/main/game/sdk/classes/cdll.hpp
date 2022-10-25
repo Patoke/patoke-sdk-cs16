@@ -31,7 +31,7 @@ typedef struct client_data_s {
 	s_vec3 origin;
 
 	// fields that can be changed by the cldll
-	s_vec3 viewangles;
+	s_angle viewangles;
 	int		iWeaponBits;
 	float	fov;	// field of view
 } client_data_t;

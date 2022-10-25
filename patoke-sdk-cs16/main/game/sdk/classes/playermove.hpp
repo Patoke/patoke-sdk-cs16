@@ -143,7 +143,7 @@ typedef struct physent_s
 	struct model_s* studiomodel;			// SOLID_BBOX, but studio clip intersections.
 	s_vec3 mins, maxs;				// only for non-bsp models
 	int info;					// For client or server to use to identify (index into edicts or cl_entities)
-	s_vec3 angles;					// rotated entities need this info for hull testing to work.
+	s_angle angles;					// rotated entities need this info for hull testing to work.
 
 	int solid;					// Triggers and func_door type WATER brushes are SOLID_NOT
 	int skin;					// BSP Contents for such things like fun_door water brushes.
@@ -184,8 +184,8 @@ typedef struct playermove_s
 	float frametime;				// Duration of this frame
 	s_vec3 forward, right, up;			// s_vec3s for angles
 	s_vec3 origin;					// Movement origin.
-	s_vec3 angles;					// Movement view angles.
-	s_vec3 oldangles;				// Angles before movement view angles were looked at.
+	s_angle angles;					// Movement view angles.
+	s_angle oldangles;				// Angles before movement view angles were looked at.
 	s_vec3 velocity;				// Current movement direction.
 	s_vec3 movedir;					// For waterjumping, a forced forward velocity so we can fly over lip of ledge.
 	s_vec3 basevelocity;				// Velocity of the conveyor we are standing, e.g.
@@ -197,7 +197,7 @@ typedef struct playermove_s
 							// Next time we can play a step sound
 	int iStepLeft;
 	float flFallVelocity;
-	s_vec3 punchangle;
+	s_angle punchangle;
 	float flSwimTime;
 	float flNextPrimaryAttack;
 	int effects;					// MUZZLE FLASH, e.g.
