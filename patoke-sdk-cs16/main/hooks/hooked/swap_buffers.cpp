@@ -14,6 +14,8 @@ bool __stdcall n_hooked::hk_swap_buffers(HDC hdc) {
 
 	imgui_wrapper_i.create_frame(); {
 
+		esp_i.tracers();
+
 		// do imgui stuff here
 		ui_i.draw();
 

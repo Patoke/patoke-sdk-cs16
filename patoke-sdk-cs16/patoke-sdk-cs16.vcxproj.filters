@@ -129,7 +129,22 @@
     <ClInclude Include="dependencies\libraries\imgui\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="main\features\movement.hpp">
+    <ClInclude Include="main\features\misc\movement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main\features\visuals\esp.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main\features\features.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main\features\visuals\visuals.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main\features\misc\misc.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main\game\sdk\classes\triapi.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -194,7 +209,10 @@
     <ClCompile Include="main\hooks\hooked\createmove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main\features\movement.cpp">
+    <ClCompile Include="main\features\misc\movement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main\features\visuals\esp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

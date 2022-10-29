@@ -1,6 +1,9 @@
 #include "movement.hpp"
 
 void s_movement::bhop(usercmd_s* cmd) {
+	if (!globals_i.local_player.is_valid || !globals_i.local_player.is_alive)
+		return;
+
 	bool is_bad_movetype = globals_i.local_player.movetype == MOVETYPE_NOCLIP || globals_i.local_player.movetype == MOVETYPE_FLY;
 	bool in_water = globals_i.local_player.waterlevel >= 2;
 

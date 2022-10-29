@@ -1,6 +1,7 @@
 #pragma once
 #include "const.hpp"
 #include "cmd.hpp"
+#include "triapi.hpp"
 
 // this file is included by both the engine and the client-dll,
 // so make sure engine declarations aren't done twice
@@ -340,4 +341,19 @@ typedef struct cl_enginefuncs_s {
 	int					(*pfnGetAppID)					(void);
 	cmdalias_t* (*pfnGetAliases)				(void);
 	void				(*pfnVguiWrap2_GetMouseDelta)	(int* x, int* y);
+
+	// patoke-sdk-cs16: developer helper functions
+	bool world_to_screen(s_vec3& origin, s_vec2& screen) {
+		bool is_behind_player = this->pTriAPI->WorldToScreen(&origin.x, &screen.x);
+
+		if (!is_behind_player) {
+			static ImVec2 disp_size = ImGui::GetIO().DisplaySize;
+			screen.x = screen.x * (disp_size.x / 2) + (disp_size.x / 2);
+			screen.y = -screen.y * (disp_size.y / 2) + (disp_size.y / 2);
+			return true;
+		}
+
+		return false;
+	}
+
 } cl_enginefunc_t;

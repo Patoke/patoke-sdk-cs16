@@ -201,7 +201,11 @@
     <ClInclude Include="dependencies\utilities\pattern\simd_scanner.hpp" />
     <ClInclude Include="dependencies\utilities\utilities.hpp" />
     <ClInclude Include="dependencies\libraries\wrappers\imgui_wrapper.hpp" />
-    <ClInclude Include="main\features\movement.hpp" />
+    <ClInclude Include="main\features\features.hpp" />
+    <ClInclude Include="main\features\misc\misc.hpp" />
+    <ClInclude Include="main\features\visuals\esp.hpp" />
+    <ClInclude Include="main\features\misc\movement.hpp" />
+    <ClInclude Include="main\features\visuals\visuals.hpp" />
     <ClInclude Include="main\game\sdk\classes\bspfile.hpp" />
     <ClInclude Include="main\game\sdk\classes\cdll.hpp" />
     <ClInclude Include="main\game\sdk\classes\cmd.hpp" />
@@ -209,6 +213,7 @@
     <ClInclude Include="main\game\sdk\classes\entity.hpp" />
     <ClInclude Include="main\game\sdk\classes\model.hpp" />
     <ClInclude Include="main\game\sdk\classes\playermove.hpp" />
+    <ClInclude Include="main\game\sdk\classes\triapi.hpp" />
     <ClInclude Include="main\game\sdk\hlsdk.hpp" />
     <ClInclude Include="main\game\interfaces.hpp" />
     <ClInclude Include="main\hooks\hooks.hpp" />
@@ -230,7 +235,8 @@
     <ClCompile Include="dependencies\libraries\minhook\hde\hde64.cpp" />
     <ClCompile Include="dependencies\libraries\minhook\hook.cpp" />
     <ClCompile Include="dependencies\libraries\minhook\trampoline.cpp" />
-    <ClCompile Include="main\features\movement.cpp" />
+    <ClCompile Include="main\features\visuals\esp.cpp" />
+    <ClCompile Include="main\features\misc\movement.cpp" />
     <ClCompile Include="main\hooks\hooked\createmove.cpp" />
     <ClCompile Include="main\hooks\hooked\swap_buffers.cpp" />
     <ClCompile Include="main\hooks\hooked\wndproc.cpp" />
