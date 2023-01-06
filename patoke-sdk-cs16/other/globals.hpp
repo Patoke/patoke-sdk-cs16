@@ -24,6 +24,35 @@ struct s_entity {
 	s_vec3 origin;
 	s_vec3 velocity;
 	s_vec3 eye_pos;
+	s_matrix3x4 bone_matrix[MAXSTUDIOBONES];
+	s_vec3 hitboxes[HITBOX_MAX];
+
+	void update_bones() {
+		if (!this->ent || !this->ent->model || this->ent->index < 0 || this->ent->index > MAX_CLIENTS)
+			return;
+
+		auto studio_header = reinterpret_cast<studiohdr_t*>(interfaces_i.studio->Mod_Extradata(this->ent->model));
+
+		// i'm sorry.
+		auto bone_matrix = *interfaces_i.studio->StudioGetBoneTransform();
+		for (int i = 0; i < MAXSTUDIOBONES; i++)
+			this->bone_matrix[i] = bone_matrix[i];
+
+		auto hitbox = (mstudiobbox_t*)((uintptr_t)(studio_header) + studio_header->hitboxindex);
+
+		if (!hitbox)
+			return;
+
+		s_vec3 bbox_mins, bbox_maxs;
+
+		for (int i = 0; i < studio_header->numhitboxes; i++) {
+			math_i.vector_transform(hitbox[i].bbmin, this->bone_matrix[hitbox[i].bone], bbox_mins);
+			math_i.vector_transform(hitbox[i].bbmax, this->bone_matrix[hitbox[i].bone], bbox_maxs);
+
+			this->hitboxes[i] = bbox_maxs + bbox_mins;
+			this->hitboxes[i] *= 0.5f;
+		}
+	}
 
 	void update_local() {
 		if (!interfaces_i.pmove)
@@ -43,12 +72,17 @@ struct s_entity {
 			return;
 
 		this->ent = ent;
-		this->is_valid = this->ent && this->ent->model && this->ent->player && this->ent->index;
+		this->index = this->ent->index;
+
+		// don't update the local player over 1 time
+		if (!is_local && this->index == interfaces_i.engine->GetLocalPlayer()->index)
+			return;
+
+		this->is_valid = this->ent && this->ent->model && this->ent->player && this->index && this->index > 0 && this->index < MAX_CLIENTS;
 
 		if (!this->is_valid)
 			return;
 
-		this->index = this->ent->index;
 		this->message_num = this->ent->curstate.messagenum;
 		this->observer_state = this->ent->curstate.iuser1;
 		this->observer_index = this->ent->curstate.iuser2;
@@ -64,6 +98,8 @@ struct s_entity {
 		// calculate their velocity (i don't think it's networked?)
 		this->velocity = (this->ent->curstate.origin - this->ent->prevstate.origin) / (this->ent->curstate.animtime - this->ent->prevstate.animtime);
 		this->eye_pos = this->origin + s_vec3(0, 0, this->use_hull == DUCKED_HULL ? PM_VEC_DUCK_VIEW : PM_VEC_VIEW);
+	
+		//update_bones();
 	}
 };
 
@@ -75,9 +111,10 @@ struct s_globals {
 	
 	// game specific
 	s_entity local_player;
+	std::vector<s_entity> entity_list;
 
-	bool initialize_window() {
-		game_window = GetModuleHandle(NULL);
+	bool initialize_window(uintptr_t game_base) {
+		game_window = reinterpret_cast<void*>(game_base);
 
 		if (!game_window)
 			return false;

@@ -5,7 +5,12 @@
 s_globals globals_i;
 
 unsigned long __stdcall main_thread(void* hmodule) {
-    while (!globals_i.initialize_window()) // wait until the game window is valid
+    n_utilities::attach_console("patoke cs 1.6 sdk [debug console]");
+
+    while (!initialization_i.init_modules())
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+    while (!globals_i.initialize_window(m[GAME].get()))
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     initialization_i.init_main();

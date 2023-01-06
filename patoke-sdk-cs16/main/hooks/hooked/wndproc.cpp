@@ -1,5 +1,6 @@
 #include "../hooks.hpp"
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT __stdcall n_hooked::hk_wndproc(HWND hwnd, unsigned int msg, WPARAM wparam, LPARAM lparam) {
 	const auto get_button_toggle = [msg, wparam](bool& button, int key) {
 		if (wparam != key)

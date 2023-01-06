@@ -2,21 +2,16 @@
 
 bool s_hooks::initialize() {
 	// hook addresses
-	static void* adr_swap_buffers = reinterpret_cast<void*>(GetProcAddress(GetModuleHandle("opengl32.dll"), "wglSwapBuffers"));
+	auto adr_swap_buffers = reinterpret_cast<void*>(n_utilities::get_export_from_table(m[OPENGL32].get(), HASH("wglSwapBuffers")));
+	auto adr_create_move = reinterpret_cast<void*>(interfaces_i.client->CL_CreateMove);
 
-	// initialize minhook
-	if (MH_Initialize() != MH_OK)
-		return false;
-
-	// minhook hooks
-	if (MH_CreateHook(adr_swap_buffers, &n_hooked::hk_swap_buffers, reinterpret_cast<void**>(&n_hooked::ofn_swap_buffers)) != MH_OK)
-		return false;
-	
-	if (MH_CreateHook(interfaces_i.client->CL_CreateMove, &n_hooked::hk_createmove, reinterpret_cast<void**>(&n_hooked::ofn_createmove)) != MH_OK)
+	if (!n_detour::init())
 		return false;
 
-	if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
-		return false;
+	CREATE_HOOK(adr_swap_buffers, n_hooked::hk_swap_buffers);
+	CREATE_HOOK(adr_create_move, n_hooked::hk_createmove);
+
+	n_detour::enable();
 
 	return true;
 }

@@ -6,3 +6,5 @@
 #include "classes/entity.hpp"
 #include "classes/model.hpp"
 #include "classes/playermove.hpp"
+#include "classes/studio.hpp"
+#include "classes/r_studioint.hpp"

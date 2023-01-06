@@ -194,6 +194,8 @@
     <ClInclude Include="dependencies\libraries\minhook\hde\table64.h" />
     <ClInclude Include="dependencies\libraries\minhook\minhook.h" />
     <ClInclude Include="dependencies\libraries\minhook\trampoline.h" />
+    <ClInclude Include="dependencies\libraries\wrappers\hooking.hpp" />
+    <ClInclude Include="dependencies\libraries\wrappers\ntdll.hpp" />
     <ClInclude Include="dependencies\precompiled.hpp" />
     <ClInclude Include="dependencies\utilities\pattern\char_queue.hpp" />
     <ClInclude Include="dependencies\utilities\pattern\mem.hpp" />
@@ -213,12 +215,16 @@
     <ClInclude Include="main\game\sdk\classes\entity.hpp" />
     <ClInclude Include="main\game\sdk\classes\model.hpp" />
     <ClInclude Include="main\game\sdk\classes\playermove.hpp" />
+    <ClInclude Include="main\game\sdk\classes\r_studioint.hpp" />
+    <ClInclude Include="main\game\sdk\classes\studio.hpp" />
     <ClInclude Include="main\game\sdk\classes\triapi.hpp" />
     <ClInclude Include="main\game\sdk\hlsdk.hpp" />
     <ClInclude Include="main\game\interfaces.hpp" />
     <ClInclude Include="main\hooks\hooks.hpp" />
     <ClInclude Include="main\initialization\initialization.hpp" />
+    <ClInclude Include="other\math\math.hpp" />
     <ClInclude Include="other\globals.hpp" />
+    <ClInclude Include="other\memory.hpp" />
     <ClInclude Include="other\position\g_pos.hpp" />
     <ClInclude Include="main\ui\ui.hpp" />
   </ItemGroup>
@@ -255,6 +261,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="main\ui\ui.cpp" />
+    <ClCompile Include="other\math\math.cpp" />
+    <ClCompile Include="other\position\g_pos.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

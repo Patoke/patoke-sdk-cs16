@@ -1,6 +1,7 @@
 #pragma once
 #include <globals.hpp>
-#include <libraries/minhook/minhook.h>
+#include <libraries/wrappers/hooking.hpp>
+#include "../initialization/initialization.hpp"
 
 // feature includes
 #include "../features/features.hpp"
@@ -21,9 +22,7 @@ namespace n_hooked {
 	typedef void(__cdecl* createmove_fn)(float, usercmd_s*, int);
 
 	// ohook declarations
-	inline swap_buffers_fn ofn_swap_buffers{};
 	inline WNDPROC ofn_wndproc{};
-	inline createmove_fn ofn_createmove{};
 
 	// hook declarations
 	bool __stdcall hk_swap_buffers(HDC hdc);

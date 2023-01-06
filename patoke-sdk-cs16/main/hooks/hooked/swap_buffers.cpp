@@ -1,25 +1,24 @@
 #include "../hooks.hpp"
 
 bool __stdcall n_hooked::hk_swap_buffers(HDC hdc) {
-	if (!imgui_wrapper_i.did_initialize_imgui) {
-		// hook wndproc
-		auto game_window_dc = WindowFromDC(hdc);
-		ofn_wndproc = reinterpret_cast<WNDPROC>(SetWindowLong(game_window_dc, GWL_WNDPROC, reinterpret_cast<long>(hk_wndproc)));
+    static auto o_hook = n_detour::get<swap_buffers_fn>(hk_swap_buffers);
 
-		// initialize imgui
-		imgui_wrapper_i.setup_imgui(hdc);
+    auto game_window_dc = WindowFromDC(hdc);
 
-		imgui_wrapper_i.did_initialize_imgui = true;
-	}
+    if (!render_i.did_initialize)
+        ofn_wndproc = reinterpret_cast<WNDPROC>(SetWindowLong(game_window_dc, GWL_WNDPROC, reinterpret_cast<long>(hk_wndproc)));
 
-	imgui_wrapper_i.create_frame(); {
+    // initialize imgui
+    render_i.setup(game_window_dc);
 
-		esp_i.tracers();
+    render_i.new_frame();
+    {
+        esp_i.tracers();
 
-		// do imgui stuff here
-		ui_i.draw();
+        // do imgui stuff here
+        ui_i.draw();
+    }
+    render_i.end_frame();
 
-	} imgui_wrapper_i.end_frame();
-
-	return ofn_swap_buffers(hdc);
+    return o_hook(hdc);
 }
