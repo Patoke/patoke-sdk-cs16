@@ -20,6 +20,7 @@ struct s_entity {
 	bool is_valid;
 	bool is_local;
 	bool is_alive;
+	bool is_dormant; // in pvs
 
 	s_vec3 origin;
 	s_vec3 velocity;
@@ -28,30 +29,8 @@ struct s_entity {
 	s_vec3 hitboxes[HITBOX_MAX];
 
 	void update_bones() {
-		if (!this->ent || !this->ent->model || this->ent->index < 0 || this->ent->index > MAX_CLIENTS)
-			return;
-
-		auto studio_header = reinterpret_cast<studiohdr_t*>(interfaces_i.studio->Mod_Extradata(this->ent->model));
-
-		// i'm sorry.
-		auto bone_matrix = *interfaces_i.studio->StudioGetBoneTransform();
-		for (int i = 0; i < MAXSTUDIOBONES; i++)
-			this->bone_matrix[i] = bone_matrix[i];
-
-		auto hitbox = (mstudiobbox_t*)((uintptr_t)(studio_header) + studio_header->hitboxindex);
-
-		if (!hitbox)
-			return;
-
-		s_vec3 bbox_mins, bbox_maxs;
-
-		for (int i = 0; i < studio_header->numhitboxes; i++) {
-			math_i.vector_transform(hitbox[i].bbmin, this->bone_matrix[hitbox[i].bone], bbox_mins);
-			math_i.vector_transform(hitbox[i].bbmax, this->bone_matrix[hitbox[i].bone], bbox_maxs);
-
-			this->hitboxes[i] = bbox_maxs + bbox_mins;
-			this->hitboxes[i] *= 0.5f;
-		}
+		// @todo: reimplement this
+		// do better entity list stuff and get bones and all that's possible in StudioDrawModel
 	}
 
 	void update_local() {
@@ -65,6 +44,12 @@ struct s_entity {
 		this->flags = interfaces_i.pmove->flags;
 		this->movetype = interfaces_i.pmove->movetype;
 		this->waterlevel = interfaces_i.pmove->waterlevel;
+
+		// the local player can't go dormant, we assume it's dormant when we die but this is incorrect
+		if (this->is_alive)
+			this->is_dormant = true;
+		else
+			this->is_dormant = false;
 	}
 
 	void update(cl_entity_s* ent, bool is_local) {
@@ -75,8 +60,11 @@ struct s_entity {
 		this->index = this->ent->index;
 
 		// don't update the local player over 1 time
-		if (!is_local && this->index == interfaces_i.engine->GetLocalPlayer()->index)
+		cl_entity_s* local = interfaces_i.engine->GetLocalPlayer(); // only used for some stuff
+		if (!is_local && this->index == local->index) {
+			this->is_valid = false;
 			return;
+		}
 
 		this->is_valid = this->ent && this->ent->model && this->ent->player && this->index && this->index > 0 && this->index < MAX_CLIENTS;
 
@@ -93,13 +81,19 @@ struct s_entity {
 		if (this->is_local)
 			return update_local();
 
+		// player is dormant, don't update
+		if (this->message_num < local->curstate.messagenum) {
+			this->is_valid = false;
+			this->is_dormant = true;
+			return;
+		}
+
+		this->is_dormant = false;
 		this->use_hull = this->ent->curstate.usehull;
 		this->origin = this->ent->origin;
 		// calculate their velocity (i don't think it's networked?)
 		this->velocity = (this->ent->curstate.origin - this->ent->prevstate.origin) / (this->ent->curstate.animtime - this->ent->prevstate.animtime);
 		this->eye_pos = this->origin + s_vec3(0, 0, this->use_hull == DUCKED_HULL ? PM_VEC_DUCK_VIEW : PM_VEC_VIEW);
-	
-		//update_bones();
 	}
 };
 
@@ -111,7 +105,7 @@ struct s_globals {
 	
 	// game specific
 	s_entity local_player;
-	std::vector<s_entity> entity_list;
+	std::array<s_entity, MAX_CLIENTS> entity_list;
 
 	bool initialize_window(uintptr_t game_base) {
 		game_window = reinterpret_cast<void*>(game_base);

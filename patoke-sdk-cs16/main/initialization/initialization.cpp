@@ -129,19 +129,9 @@ void s_initialization::init_interfaces() {
 	interfaces_i.engine = s_interfaces::grab<cl_enginefunc_t*>(n_utilities::find_str_ref(m[CLIENT].get<HMODULE>(), m[HARDWARE].module_size, engine_str));
 	interfaces_i.pmove = s_interfaces::grab<playermove_t*>(n_utilities::find_str_ref(m[HARDWARE].get<HMODULE>(), m[HARDWARE].module_size, pmove_str));
 
-	// always do these in order from oldest build to latest
-	interfaces_i.studio = s_interfaces::grab<engine_studio_api_t*, 1>(m[CLIENT], (uintptr_t)interfaces_i.client->HUD_GetStudioModelInterface, { 0x30, 0x1A });
-	
-	// @todo: fix these
-	//interfaces_i.studio_api = s_interfaces::grab<r_studio_interface_t*>(m[CLIENT], (uintptr_t)interfaces_i.client->HUD_GetStudioModelInterface, { 0x36, 0x20 });
-	//interfaces_i.studio_model = s_interfaces::grab<studio_model_renderer_t*>(m[CLIENT], (uintptr_t)interfaces_i.studio_api->StudioDrawModel, { 0x5 });
-
-	printf("[+] interfaces_i.client: 0x%X\n", interfaces_i.client);
-	printf("[+] interfaces_i.engine: 0x%X\n", interfaces_i.engine);
-	printf("[+] interfaces_i.pmove: 0x%X\n", interfaces_i.pmove);
-	printf("[+] interfaces_i.studio: 0x%X\n", interfaces_i.studio);
-	//printf("[+] interfaces_i.studio_api: 0x%X | %i\n", interfaces_i.studio_api, interfaces_i.studio_api->version);
-	//printf("[+] interfaces_i.studio_model: 0x%X\n", interfaces_i.studio_model);
+	interfaces_i.studio = s_interfaces::grab<engine_studio_api_t*>(m[CLIENT], (uintptr_t)interfaces_i.client->HUD_GetStudioModelInterface, { 0x30, 0x1A });
+	interfaces_i.studio_api = s_interfaces::grab<r_studio_interface_t*>(m[CLIENT], (uintptr_t)interfaces_i.client->HUD_GetStudioModelInterface, { 0x36, 0x20 });
+	interfaces_i.studio_model = s_interfaces::grab<c_studiomodelrenderer*>(m[CLIENT], (uintptr_t)interfaces_i.studio_api->StudioDrawModel, { 0x5 });
 }
 
 void s_initialization::init_static() {

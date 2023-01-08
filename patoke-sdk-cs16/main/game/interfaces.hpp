@@ -31,6 +31,14 @@ struct s_module {
             ;
     }
 
+#if IS_CS16
+    template<typename type>
+    type get_interface(const char* interface_name) {
+        auto create_interface_fn = n_utilities::get_export_from_table<void*(*)(const char*, int*)>(this->module_address, HASH("CreateInterface"));
+        return create_interface_fn(interface_name, NULL);
+    }
+#endif
+
 #ifdef _DEBUG
     char module_name[64]; // just make it 64 bytes, we don't need more...
 #endif
@@ -47,16 +55,24 @@ struct s_interfaces {
 	playermove_t* pmove;
     engine_studio_api_t* studio;
     r_studio_interface_t* studio_api;
-    studio_model_renderer_t* studio_model;
+    c_studiomodelrenderer* studio_model;
 
     template<typename type, unsigned int dereference_count = 0>
     static type grab(uintptr_t address) {
+#ifdef _DEBUG
+        const char* type_name = typeid(type).name();
+#endif
+
         auto iface = reinterpret_cast<type>(address);
 
         for (unsigned int i = 0; i < dereference_count; i++)
             iface = *reinterpret_cast<type*>(iface);
+        
+#ifdef _DEBUG
+        printf("[+] %s: 0x%X\n", type_name, uintptr_t(iface));
+#endif
 
-        // fix for protected regions (this counts as a dereference!!!)
+        // fix for protected regions
         memcpy(&iface, iface, sizeof(iface));
 
         return iface;
@@ -64,23 +80,34 @@ struct s_interfaces {
 
     template<typename type, unsigned int dereference_count = 0>
     static type grab(s_module mod, uintptr_t start_addr, std::vector<uintptr_t> addresses) {
+#ifdef _DEBUG
+        const char* type_name = typeid(type).name();
+#endif
+
         type iface = reinterpret_cast<type>(start_addr);
         for (size_t i = 0; i < addresses.size(); i++) {
-            iface = reinterpret_cast<type>(start_addr + addresses.at(i));
-
-            for (unsigned int i = 0; i < dereference_count; i++)
-                iface = *reinterpret_cast<type*>(iface);
+            // make sure we point to the right thing
+            type iface_copy = *reinterpret_cast<type*>(start_addr + addresses.at(i));;
 
             // we found the interface
-            if (mod.address_in_module((uintptr_t)iface))
+            if (mod.address_in_module((uintptr_t)iface_copy)) {
+                iface = reinterpret_cast<type>(start_addr + addresses.at(i));
                 break;
+            }
+#ifdef _DEBUG
+            else 
+                printf("[!] didn't find %s (offset: 0x%X)\n", type_name, addresses.at(i));
+#endif
         }
 
-        // epic fail
-        if (!mod.address_in_module((uintptr_t)iface))
-            return nullptr;
+        for (unsigned int i = 0; i < dereference_count; i++)
+            iface = *reinterpret_cast<type*>(iface);
 
-        // fix for protected regions (this counts as a dereference!!!)
+#ifdef _DEBUG
+        printf("[+] %s: 0x%X\n", type_name, uintptr_t(iface));
+#endif
+
+        // fix for protected regions
         memcpy(&iface, iface, sizeof(iface));
 
         return iface;
